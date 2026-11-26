@@ -6,7 +6,7 @@
 /*   By: ny-araza <ny-araza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/20 16:58:41 by ny-araza          #+#    #+#             */
-/*   Updated: 2026/11/26 16:03:06 by ny-araza         ###   ########.fr       */
+/*   Updated: 2026/11/26 16:10:22 by ny-araza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,23 @@ int	ft_parse(int argc, char **argv, t_config *config)
 	}
 	while (i < argc)
 	{
-		printf("%d %s\n", i, argv[i]);
 		if (i == 8)
 		{
 			if (strcmp(argv[i], "fifo") != 0 && strcmp(argv[i], "edf") != 0)
 			{
-				printf("%d", strcmp(argv[i], "fifo"));
 				printf("Parse Error: The arguments %s must be 'fifo' or 'edf'", ft_get_arguments(i));
 				return (-1);
 			}
+			config->scheduler = argv[i];
 		}
 		else{
 			if (ft_check_number(argv[i]) == 1)
 				ft_stock_config(config, atoi(argv[i]), i);
 			else
+			{
+				printf("Parse Error: The arguments %s must integer positif", ft_get_arguments(i));
 				return (-1);
+			}
 		}
 		i++;
 	}
