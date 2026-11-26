@@ -1,19 +1,19 @@
 CFLAGS = -Wall -Wextra -Werror -g
 CC = cc
-TARGET = codexion
+NAME = codexion
 SRC = main.c parse.c process.c utils.c
 OBJ = $(SRC:.c=.o)
 
 
-all: $(TARGET)
+all: $(NAME)
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(TARGET)
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(TARGET)
+	rm -rf $(NAME)
 
 re: fclean all
