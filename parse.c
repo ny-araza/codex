@@ -6,7 +6,7 @@
 /*   By: ny-araza <ny-araza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/20 16:58:41 by ny-araza          #+#    #+#             */
-/*   Updated: 2026/11/26 16:10:22 by ny-araza         ###   ########.fr       */
+/*   Updated: 2026/11/26 16:43:00 by ny-araza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 #include <string.h>
 #include "parse.h"
 #include "utils.h"
+
+int	ft_check_number(char *args)
+{
+	unsigned long	i;
+
+	i = 0;
+	while (i < strlen(args))
+	{
+		if (ft_isdigit(args[i]) == -1)
+			return (-1);
+		i++;
+	}
+	return (1);
+}
 
 void	ft_stock_config(t_config *config, int number, int index)
 {
@@ -54,16 +68,30 @@ char	*ft_get_arguments(unsigned int index)
 		return ("scheduler");
 }
 
-int	ft_check_number(char *args)
+int	ft_check_args(t_config *config, int index, char *args)
 {
-	unsigned long	i;
-
-	i = 0;
-	while (i < strlen(args))
+	if (index == 8)
 	{
-		if (ft_isdigit(args[i]) == -1)
+		if (strcmp(args, "fifo") != 0 && strcmp(args, "edf") != 0)
+		{
+			printf(
+				"Parse Error: The arguments %s must be 'fifo' or 'edf'",
+				ft_get_arguments(index)
+				);
 			return (-1);
-		i++;
+		}
+		config->scheduler = args;
+	}
+	else
+	{
+		if (ft_check_number(args) == 1)
+			ft_stock_config(config, atoi(args), index);
+		else
+		{
+			printf("Parse Error: The arguments %s must integer positif",
+				ft_get_arguments(index));
+			return (-1);
+		}
 	}
 	return (1);
 }
@@ -84,24 +112,8 @@ int	ft_parse(int argc, char **argv, t_config *config)
 	}
 	while (i < argc)
 	{
-		if (i == 8)
-		{
-			if (strcmp(argv[i], "fifo") != 0 && strcmp(argv[i], "edf") != 0)
-			{
-				printf("Parse Error: The arguments %s must be 'fifo' or 'edf'", ft_get_arguments(i));
-				return (-1);
-			}
-			config->scheduler = argv[i];
-		}
-		else{
-			if (ft_check_number(argv[i]) == 1)
-				ft_stock_config(config, atoi(argv[i]), i);
-			else
-			{
-				printf("Parse Error: The arguments %s must integer positif", ft_get_arguments(i));
-				return (-1);
-			}
-		}
+		if (ft_check_args(config, i, argv[i]) == -1)
+			return (-1);
 		i++;
 	}
 	return (1);
